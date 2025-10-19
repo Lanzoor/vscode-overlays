@@ -67,7 +67,7 @@ Add the following entries to your `settings.json` file, to tell the system where
 
 ## 🔄 Step 4 — Restart and Activate
 
-1. Hit **Ctrl+Shift+P**
+1. Hit **Ctrl+Shift+P** up your keyboard.
 2. Type **Enable Custom CSS and JS**
 3. Click it!
 4. VSCode will say “yo, wanna restart?” — click **Restart Visual Studio Code** 🌀
@@ -91,8 +91,8 @@ sudo chown -R $USER ${readlink -f $(which code)}
 VSCode sometimes breaks these tweaks after updates (thanks, Microsoft 😩). If that happens:
 
 -   Re-run the `Ctrl+Shift+P` → `Enable Custom CSS and JS` command
+-   _If you’re on Linux, maybe re-run the chown command too_
 -   Restart VSCode again
--   If you’re on Linux, maybe re-run the chown command too
 
 ### 🚨 “VSCode installation is corrupted” warning
 
