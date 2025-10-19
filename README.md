@@ -1,6 +1,6 @@
 # 🎨✨ Welcome to VSCode Overlays! ✨🎨
 
-Hey hey!! 👋 Ready to _supercharge_ your VSCode with **beautiful effects, animations, and overlays** that’ll make your editor come alive? Let’s get your VSCode looking absolutely aesthetic. Follow along! 🚀
+Hey hey!! 👋 Ready to _supercharge_ your VSCode with **beautiful effects, animations, and overlays** that’ll make your editor come alive? Let’s get your VSCode looking absolutely aesthetic. Follow along! 🚀 It gets a bit manual, but I promise; it will be worth it!
 
 **Make sure to read this till the end, because there are lot's of FAQs you might need to consider!**
 
@@ -96,7 +96,20 @@ VSCode sometimes breaks these tweaks after updates (thanks, Microsoft 😩). If 
 
 ### 🚨 “VSCode installation is corrupted” warning
 
-Don’t panic - it’s totally normal. You can **safely ignore it**.
+Don’t panic - it’s totally normal. You can **safely ignore it**. You can click the small cog icon (⚙️), and click **Don't Show Again**. Bye-bye!
+
+### How to Update vscode-overlays
+
+On Linux;
+
+```sh
+cd ~/Downloads/vscode-overlays
+git pull
+```
+
+On Windows, you might have to download the files manually on GitHub 😭 Head to 👉 [https://github.com/Lanzoor/vscode-overlays](https://github.com/Lanzoor/vscode-overlays) Then click **"<> Code ▼" → "🗂️ Download ZIP"** Unzip it, and replace the old files.
+
+By the way, until I make an automatic update system, you still might want to check frequently for updates. Sorry!
 
 ---
 
