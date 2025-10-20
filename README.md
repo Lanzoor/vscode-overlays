@@ -1,12 +1,12 @@
 # 🎨✨ Welcome to VSCode Overlays! ✨🎨
 
-Hey hey!! 👋 Ready to _supercharge_ your VSCode with **beautiful effects, animations, and overlays** that’ll make your editor come alive? Let’s get your VSCode looking absolutely aesthetic. Follow along! 🚀 It gets a bit manual, but I promise; it will be worth it!
+Hey there! 👋 Ready to supercharge your VSCode with **beautiful effects, animations, and overlays** that’ll make your editor come alive? Let’s get your VSCode looking absolutely aesthetic. Follow along! It gets a bit manual, but I promise - it will be worth it!
 
 **Make sure to read this till the end, because there are lot's of FAQs you might need to consider!**
 
 ---
 
-## 🧩 Step 1 — Install the Custom CSS Extension
+## 🧩 Step 1 - Install the Custom CSS Extension
 
 We’ll need **be5invis.vscode-custom-css** to load our styles!
 
@@ -16,17 +16,15 @@ We’ll need **be5invis.vscode-custom-css** to load our styles!
 -   Search for `be5invis.vscode-custom-css`
 -   Click **Install** ✅
 
-**Option 2 (the hacker way 💻):**
+**Option 2 (the terminal way 💻):**
 
 ```sh
 code --install-extension be5invis.vscode-custom-css
 ```
 
-Boom! You’re done with Step 1 🎯
-
 ---
 
-## 📦 Step 2 — Download the VSCode Overlays
+## 📦 Step 2 - Download the VSCode Overlays
 
 ### 🐧 On Linux:
 
@@ -37,11 +35,11 @@ git clone https://github.com/Lanzoor/vscode-overlays.git
 
 ### 🪟 On Windows:
 
-Head to 👉 [https://github.com/Lanzoor/vscode-overlays](https://github.com/Lanzoor/vscode-overlays) Then click **"<> Code ▼" → "🗂️ Download ZIP"** Unzip it somewhere comfy — like your Downloads folder! 📂
+Head to 👉 [https://github.com/Lanzoor/vscode-overlays/releases/latest/](https://github.com/Lanzoor/vscode-overlays/releases/latest/) Then click **Source Code (zip)** to download the source code. Unzip it somewhere comfy - like your Downloads folder!
 
 ---
 
-## ⚙️ Step 3 — Add the Tweaks to Your `settings.json`
+## ⚙️ Step 3 - Add the Tweaks to Your `settings.json`
 
 Add the following entries to your `settings.json` file, to tell the system where the magic lives!
 
@@ -65,12 +63,12 @@ Add the following entries to your `settings.json` file, to tell the system where
 
 ---
 
-## 🔄 Step 4 — Restart and Activate
+## 🔄 Step 4 - Restart and Activate
 
 1. Hit **Ctrl+Shift+P** up your keyboard.
 2. Type **Enable Custom CSS and JS**
 3. Click it!
-4. VSCode will say “yo, wanna restart?” — click **Restart Visual Studio Code** 🌀
+4. VSCode will show you a pop-up, saying you need to restart after changing - click **Restart Visual Studio Code**
 
 And just like that, you can enjoy the new experience!
 
@@ -107,7 +105,7 @@ cd ~/Downloads/vscode-overlays
 git pull
 ```
 
-On Windows, you might have to download the files manually on GitHub 😭 Head to 👉 [https://github.com/Lanzoor/vscode-overlays](https://github.com/Lanzoor/vscode-overlays) Then click **"<> Code ▼" → "🗂️ Download ZIP"** Unzip it, and replace the old files.
+On Windows, you might have to download the files manually on GitHub. Head to 👉 [https://github.com/Lanzoor/vscode-overlays/releases/latest/](https://github.com/Lanzoor/vscode-overlays/releases/latest/) Then click **Source Code (zip)** to download the source code. Unzip it, and replace the old files.
 
 By the way, until I make an automatic update system, you still might want to check frequently for updates. Sorry!
 
