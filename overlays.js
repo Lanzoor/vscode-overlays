@@ -476,3 +476,86 @@ weatherOverlay.addEventListener('mousedown', () => {
         weatherOverlay.style.transform = 'translateY(-2.5px) scale(1)';
     });
 });
+
+const levelOverlay = document.createElement('div');
+const levelProgress = document.createElement('div');
+const levelText = document.createElement('div');
+
+levelOverlay.appendChild(levelText);
+levelOverlay.appendChild(levelProgress);
+document.body.appendChild(levelOverlay);
+
+Object.assign(levelOverlay.style, {
+    position: 'absolute',
+    zIndex: '20002',
+    fontSize: '17.5px',
+    color: 'rgb(255, 62, 62)',
+    textShadow: '0 0 10px rgb(255, 62, 62)',
+    backgroundColor: 'rgba(255, 62, 62, 0.25)',
+    border: '2px solid rgba(255, 25, 25, 1)',
+    boxShadow: '0 0 10px rgba(255, 25, 25, 1), inset 0 0 10px rgba(255, 25, 25, 1)',
+    borderRadius: '5px',
+    textAlign: 'center',
+    left: '50%',
+    top: '10px',
+    transform: 'translateX(-50%)',
+    fontFamily: "'FiraCode Nerd Font', monospace",
+    transition: 'opacity 1s ease',
+    width: '25%',
+});
+
+Object.assign(levelText.style, textStyle);
+
+Object.assign(levelProgress.style, {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    height: '100%',
+    width: '0%',
+    borderRadius: '5px',
+    backgroundColor: 'rgba(255, 25, 25, 0.35)',
+    transition: 'width 0.2s ease',
+    zIndex: '20001',
+});
+
+function getCurrentLevelStatus() {
+    let baseLevel = 1000;
+    let copyKeyCount = keyCount;
+    let level = 0;
+
+    while (true) {
+        if (copyKeyCount >= baseLevel) {
+            copyKeyCount -= baseLevel;
+            level++;
+            baseLevel += 50;
+        } else {
+            return [level, copyKeyCount, baseLevel];
+        }
+    }
+}
+
+function updateLevelContent() {
+    const [level, keys, nextLevelReq] = getCurrentLevelStatus();
+    levelText.textContent = `Lv. ${level} | ${keys}/${nextLevelReq} (${nextLevelReq - keys} left)`;
+
+    const progressPercent = (keys / nextLevelReq) * 100;
+    levelProgress.style.width = `${progressPercent}%`;
+    requestAnimationFrame(updateLevelContent);
+}
+
+updateLevelContent();
+
+let level_hue = 0;
+
+function rainbowGlow() {
+    level_hue = (level_hue + 0.5) % 360;
+    levelText.style.color = `hsl(${level_hue}, 100%, 60%)`;
+    levelText.style.textShadow = `0 0 10px hsl(${level_hue}, 100%, 60%), inset 0 0 10px hsl(${level_hue}, 100%, 60%)`;
+    levelOverlay.style.backgroundColor = `hsla(${level_hue}, 100%, 50%, 0.25)`;
+    levelOverlay.style.borderColor = `hsla(${level_hue}, 100%, 50%, 1)`;
+    levelOverlay.style.boxShadow = `0 0 10px hsla(${level_hue}, 100%, 50%, 1), inset 0 0 10px hsla(${level_hue}, 100%, 50%, 1)`;
+    levelProgress.style.backgroundColor = `hsla(${level_hue}, 100%, 50%, 0.35)`;
+    requestAnimationFrame(rainbowGlow);
+}
+
+rainbowGlow();

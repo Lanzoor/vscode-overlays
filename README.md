@@ -16,7 +16,7 @@ We’ll need **be5invis.vscode-custom-css** to load our styles!
 -   Search for `be5invis.vscode-custom-css`
 -   Click **Install** ✅
 
-**Option 2 (the terminal way 💻):**
+**Option 2 (the terminal way):**
 
 ```sh
 code --install-extension be5invis.vscode-custom-css
@@ -86,7 +86,7 @@ sudo chown -R $USER ${readlink -f $(which code)}
 
 ### 🔁 After Updates
 
-VSCode sometimes breaks these tweaks after updates (thanks, Microsoft 😩). If that happens:
+VSCode breaks these tweaks after updates. If that happens:
 
 -   Re-run the `Ctrl+Shift+P` → `Enable Custom CSS and JS` command
 -   _If you’re on Linux, maybe re-run the chown command too_
@@ -111,4 +111,4 @@ By the way, until I make an automatic update system, you still might want to che
 
 ---
 
-🎉 **And that’s it!** You now have a supercharged, stylish, animated VSCode setup!
+🎉 **And that’s it!** You now have a supercharged, stylish, animated VSCode setup! Feel free to tweak the JS and CSS files yourself to your liking. You can even add your OWN funny overlays!
