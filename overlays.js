@@ -519,7 +519,7 @@ Object.assign(levelProgress.style, {
 });
 
 function getCurrentLevelStatus() {
-    let baseLevel = 1000;
+    let baseLevel = 500;
     let copyKeyCount = keyCount;
     let level = 0;
 
@@ -527,7 +527,7 @@ function getCurrentLevelStatus() {
         if (copyKeyCount >= baseLevel) {
             copyKeyCount -= baseLevel;
             level++;
-            baseLevel += 50;
+            baseLevel += 25;
         } else {
             return [level, copyKeyCount, baseLevel];
         }
@@ -547,15 +547,15 @@ updateLevelContent();
 
 let level_hue = 0;
 
-function rainbowGlow() {
+function updateLevelColor() {
     level_hue = (level_hue + 0.5) % 360;
-    levelText.style.color = `hsl(${level_hue}, 100%, 60%)`;
-    levelText.style.textShadow = `0 0 10px hsl(${level_hue}, 100%, 60%), inset 0 0 10px hsl(${level_hue}, 100%, 60%)`;
+    levelText.style.color = `hsl(${level_hue}, 100%, 80%)`;
+    levelText.style.textShadow = `0 0 10px hsl(${level_hue}, 100%, 75%), inset 0 0 10px hsl(${level_hue}, 100%, 60%)`;
     levelOverlay.style.backgroundColor = `hsla(${level_hue}, 100%, 50%, 0.25)`;
-    levelOverlay.style.borderColor = `hsla(${level_hue}, 100%, 50%, 1)`;
+    levelOverlay.style.borderColor = `hsla(${level_hue}, 100%, 75%, 1)`;
     levelOverlay.style.boxShadow = `0 0 10px hsla(${level_hue}, 100%, 50%, 1), inset 0 0 10px hsla(${level_hue}, 100%, 50%, 1)`;
     levelProgress.style.backgroundColor = `hsla(${level_hue}, 100%, 50%, 0.35)`;
-    requestAnimationFrame(rainbowGlow);
+    requestAnimationFrame(updateLevelColor);
 }
 
-rainbowGlow();
+updateLevelColor();
