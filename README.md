@@ -72,6 +72,8 @@ Add the following entries to your `settings.json` file, to tell the system where
 
 And just like that, you can enjoy the new experience!
 
+> By the way, this overlay works the best with dark themes, **NOT light**.
+
 ---
 
 ## 🧠 Notes & Troubleshooting
