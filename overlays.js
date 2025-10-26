@@ -217,7 +217,6 @@ keyOverlay.style.boxShadow = `0 0 20px hsl(${text_hue}, 100%, 60%)`;
 document.addEventListener('keydown', () => {
     keyOverlay.style.transition = 'none';
     keyOverlay.style.transform = 'translateY(-5px) scale(1.1)';
-    keyOverlay.style.backgroundColor = `hsla(${text_hue}, 100%, 60%, 0.5)`;
     keyOverlay.style.boxShadow = `0 0 20px hsl(${text_hue}, 100%, 60%), inset 0 0 20px hsl(${text_hue}, 100%, 60%)`;
     keyOverlay.style.border = `1px solid hsl(${text_hue}, 100%, 75%)`;
     keyText.style.color = `hsl(${text_hue}, 100%, 75%)`;
@@ -227,7 +226,6 @@ document.addEventListener('keydown', () => {
     requestAnimationFrame(() => {
         keyOverlay.style.transition = 'transform 0.1s ease, background-color 0.1s ease';
         keyOverlay.style.transform = 'translateY(0px) scale(1)';
-        keyOverlay.style.backgroundColor = `hsla(${text_hue}, 100%, 60%, 0.5)`;
         keyOverlay.style.boxShadow = `0 0 20px hsl(${text_hue}, 100%, 60%)`;
     });
 });
@@ -263,9 +261,7 @@ function updateLocation() {
         })
         .catch((err) => {
             console.error('Location failed:', err);
-            latitude = 40.7128;
-            longitude = -74.006;
-            availableLocation = true;
+            availableLocation = false;
             updateWeather();
         });
 }
@@ -425,12 +421,12 @@ setInterval(updateWeatherStatus, 500);
 
 function updateWeatherContent() {
     if (availableWeather && availableLocation) {
-        weatherDescText.innerHTML = `🌡️ ${temperature}°C 💦 ${humidity}%\n💨 ${windSpeed}m/s @ ${windDirection}° (${windDirectionDescriptor})\n🌤️ <span id="highlight">${weatherDescriptor}</span>\n🌫️ <span id="highlight">PM10</span> ${pm10}µg/m³ <span id="highlight">PM2.5</span> ${pm2_5}µg/m³`;
+        weatherDescText.innerHTML = `🌡️ ${temperature}°C 💦 ${humidity}%\n💨 ${windSpeed}m/s @ ${windDirection}° (${windDirectionDescriptor})\n🌤️ <span id="highlight">${weatherDescriptor}</span>\n🌫️ <span id="highlight">PM10</span> ${pm10}µg/m³ <span id="highlight">PM2.5</span> ${pm2_5}µg/m³\n<span id="highlight">Click to refresh weather content</span>`;
     } else {
         if (!availableLocation) {
-            weatherDescText.innerHTML = "Couldn't fetch current user location";
+            weatherDescText.innerHTML = `Couldn't fetch current user location\n<span id="highlight">Click to retry server connection</span>`;
         } else {
-            weatherDescText.innerHTML = "Couldn't fetch weather information";
+            weatherDescText.innerHTML = `Couldn't fetch weather information\n<span id="highlight">Click to retry server connection</span>`;
         }
     }
 }
@@ -479,21 +475,18 @@ weatherOverlay.addEventListener('mousedown', () => {
 
 const levelOverlay = document.createElement('div');
 const levelProgress = document.createElement('div');
+const levelProgressLine = document.createElement('div');
 const levelText = document.createElement('div');
 
 levelOverlay.appendChild(levelText);
 levelOverlay.appendChild(levelProgress);
+levelOverlay.appendChild(levelProgressLine);
 document.body.appendChild(levelOverlay);
 
 Object.assign(levelOverlay.style, {
     position: 'absolute',
     zIndex: '20002',
     fontSize: '17.5px',
-    color: 'rgb(255, 62, 62)',
-    textShadow: '0 0 10px rgb(255, 62, 62)',
-    backgroundColor: 'rgba(255, 62, 62, 0.25)',
-    border: '2px solid rgba(255, 25, 25, 1)',
-    boxShadow: '0 0 10px rgba(255, 25, 25, 1), inset 0 0 10px rgba(255, 25, 25, 1)',
     borderRadius: '5px',
     textAlign: 'center',
     left: '50%',
@@ -501,6 +494,7 @@ Object.assign(levelOverlay.style, {
     transform: 'translateX(-50%)',
     fontFamily: "'FiraCode Nerd Font', monospace",
     transition: 'opacity 1s ease',
+    border: '2px solid hsla(0, 100%, 90%, 1)',
     width: '25%',
 });
 
@@ -513,9 +507,19 @@ Object.assign(levelProgress.style, {
     height: '100%',
     width: '0%',
     borderRadius: '5px',
-    backgroundColor: 'rgba(255, 25, 25, 0.35)',
     transition: 'width 0.2s ease',
     zIndex: '20001',
+});
+
+Object.assign(levelProgressLine.style, {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    height: '100%',
+    width: '2px',
+    borderRadius: '5px',
+    transition: 'left 0.2s ease',
+    zIndex: '20003',
 });
 
 function getCurrentLevelStatus() {
@@ -527,7 +531,7 @@ function getCurrentLevelStatus() {
         if (copyKeyCount >= baseLevel) {
             copyKeyCount -= baseLevel;
             level++;
-            baseLevel += 25;
+            baseLevel += 50;
         } else {
             return [level, copyKeyCount, baseLevel];
         }
@@ -540,6 +544,8 @@ function updateLevelContent() {
 
     const progressPercent = (keys / nextLevelReq) * 100;
     levelProgress.style.width = `${progressPercent}%`;
+    levelProgressLine.style.left = `${progressPercent}%`;
+
     requestAnimationFrame(updateLevelContent);
 }
 
@@ -549,12 +555,15 @@ let level_hue = 0;
 
 function updateLevelColor() {
     level_hue = (level_hue + 0.5) % 360;
-    levelText.style.color = `hsl(${level_hue}, 100%, 80%)`;
+    levelText.style.color = `hsl(${level_hue}, 100%, 90%)`;
     levelText.style.textShadow = `0 0 10px hsl(${level_hue}, 100%, 75%), inset 0 0 10px hsl(${level_hue}, 100%, 60%)`;
-    levelOverlay.style.backgroundColor = `hsla(${level_hue}, 100%, 50%, 0.25)`;
-    levelOverlay.style.borderColor = `hsla(${level_hue}, 100%, 75%, 1)`;
-    levelOverlay.style.boxShadow = `0 0 10px hsla(${level_hue}, 100%, 50%, 1), inset 0 0 10px hsla(${level_hue}, 100%, 50%, 1)`;
-    levelProgress.style.backgroundColor = `hsla(${level_hue}, 100%, 50%, 0.35)`;
+    levelOverlay.style.backgroundColor = `hsla(${level_hue}, 100%, 50%, 0.15)`;
+    levelOverlay.style.borderColor = `hsl(${level_hue}, 100%, 90%)`;
+    levelOverlay.style.boxShadow = `0 0 10px hsl(${level_hue}, 100%, 50%), inset 0 0 10px hsl(${level_hue}, 100%, 50%)`;
+    levelProgress.style.backgroundColor = `hsla(${level_hue}, 100%, 50%, 0.25)`;
+    levelProgress.style.boxShadow = `0 0 5px hsl(${level_hue}, 100%, 50%), inset 0 0 5px hsl(${level_hue}, 100%, 50%)`;
+    levelProgressLine.style.backgroundColor = `hsl(${level_hue}, 100%, 90%)`;
+    levelProgressLine.style.boxShadow = `0 0 10px hsl(${level_hue}, 100%, 50%)`;
     requestAnimationFrame(updateLevelColor);
 }
 
