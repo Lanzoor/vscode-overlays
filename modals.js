@@ -108,7 +108,7 @@ Object.assign(modalInfoText1.style, {
     color: 'rgba(193, 162, 252, 1)',
     textShadow: '0 0 10px rgba(193, 162, 252, 1)',
 });
-modalInfoText1.innerHTML = `VSCode improvements and visuals by Lanzoor.<br>Make sure to turn the NodeJS server on for the full experience.<br>Good luck, and have fun!`;
+modalInfoText1.innerHTML = `VSCode improvements and visuals by Lanzoor.<br>Good luck, and have fun!`;
 modalContainer.appendChild(modalInfoText1);
 
 const modalCloseInfoText = document.createElement('div');
@@ -122,8 +122,7 @@ Object.assign(modalCloseInfoText.style, {
     transform: 'translateX(-50%)',
     animation: 'blurpleGlow 5s infinite linear',
 });
-modalCloseInfoText.innerHTML =
-    '- Click anywhere on screen to close modal -<br>- 画面のどこかをクリックするとモーダルが閉じます -';
+modalCloseInfoText.innerHTML = '- Click anywhere on screen to close modal -<br>- 画面のどこかをクリックするとモーダルが閉じます -';
 modalContainer.appendChild(modalCloseInfoText);
 
 const circle1 = document.createElement('div');
