@@ -48,11 +48,7 @@ document.addEventListener('mousemove', (e) => {
         boxShadow: '0 0 8px #00ffff35',
     };
 
-    Object.assign(
-        trail.style,
-        baseTrailStyles,
-        isClicking ? clickTrailStyles : idleTrailStyles
-    );
+    Object.assign(trail.style, baseTrailStyles, isClicking ? clickTrailStyles : idleTrailStyles);
 
     document.body.appendChild(trail);
 
@@ -79,8 +75,7 @@ Object.assign(cursorRing.style, {
     zIndex: '30001',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'transparent',
-    transition:
-        'transform 0.05s ease-out, border 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease',
+    transition: 'transform 0.05s ease-out, border 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease',
     opacity: '1',
 });
 

@@ -1,18 +1,20 @@
-const lightGreen = 'rgba(174, 252, 122, 0.75)';
-const solidGreen = '#40ff00';
-const lightCyan = 'rgba(94, 162, 158, 0.75)';
-const solidCyan = '#61ffff';
-const lightRed = 'rgba(213, 69, 69, 0.75)';
-const solidRed = '#c52929';
-const solidYellow = '#e7c15f';
-const dimGreen = 'rgba(77, 99, 62, 0.75)';
-const dimCyan = 'rgba(62, 99, 97, 0.75)';
-const dimRed = 'rgba(115, 24, 24, 0.75)';
+const lightGreen = 'rgba(174, 252, 122, 0.8)';
+const solidGreen = 'rgba(64, 255, 0, 1)';
+const lightCyan = 'rgba(94, 162, 158, 0.8)';
+const solidCyan = 'rgba(97, 255, 255, 1)';
+const lightRed = 'rgba(213, 69, 69, 0.8)';
+const solidRed = 'rgba(197, 41, 41, 1)';
+const lightYellow = 'rgba(231, 193, 95, 0.8)';
+const solidYellow = 'rgba(231, 193, 95, 1)';
+const dimGreen = 'rgba(77, 99, 62, 0.8)';
+const dimCyan = 'rgba(62, 99, 97, 0.8)';
+const dimRed = 'rgba(115, 24, 24, 0.8)';
 
 const descStyle = {
     position: 'absolute',
     padding: '10px 15px',
     background: 'rgba(30, 30, 30, 0.85)',
+    backdropFilter: 'blur(5px)',
     fontFamily: "'FiraCode Nerd Font', monospace",
     fontSize: '13px',
     border: `1px solid ${solidCyan}`,
@@ -36,6 +38,7 @@ const textStyle = {
 const overlayStyle = {
     padding: '7.5px 15px',
     background: dimCyan,
+    backdropFilter: 'blur(5px)',
     fontFamily: "'FiraCode Nerd Font', monospace",
     fontSize: '14px',
     border: `1px solid ${solidCyan}`,
@@ -495,7 +498,7 @@ Object.assign(levelOverlay.style, {
     fontFamily: "'FiraCode Nerd Font', monospace",
     transition: 'opacity 1s ease',
     border: '2px solid hsla(0, 100%, 90%, 1)',
-    width: '25%',
+    width: '30%',
 });
 
 Object.assign(levelText.style, textStyle);
@@ -568,3 +571,49 @@ function updateLevelColor() {
 }
 
 updateLevelColor();
+
+let lastFrameTime = performance.now();
+let lastUpdateTime = performance.now();
+let frameCount = 0;
+
+let fpsDisplay = document.createElement('div');
+Object.assign(fpsDisplay.style, {
+    position: 'fixed',
+    bottom: '20px',
+    left: '50%',
+    transform: 'translateX(-50%)',
+    zIndex: '30001',
+    fontFamily: "'FiraCode Nerd Font', monospace",
+    fontSize: '20px',
+});
+
+document.body.appendChild(fpsDisplay);
+
+function loop() {
+    const now = performance.now();
+    frameCount++;
+
+    if (now - lastUpdateTime >= 250) {
+        const fps = ((frameCount * 1000) / (now - lastUpdateTime)).toFixed(2);
+        fpsDisplay.textContent = `${fps} FPS`;
+
+        if (fps <= 30) {
+            fpsDisplay.style.color = solidRed;
+            fpsDisplay.style.textShadow = `0 0 10px ${lightRed}`;
+        } else if (fps > 30 && fps <= 45) {
+            fpsDisplay.style.color = solidYellow;
+            fpsDisplay.style.textShadow = `0 0 10px ${lightYellow}`;
+        } else {
+            fpsDisplay.style.color = solidGreen;
+            fpsDisplay.style.textShadow = `0 0 10px ${lightGreen}`;
+        }
+
+        frameCount = 0;
+        lastUpdateTime = now;
+    }
+
+    lastFrameTime = now;
+    requestAnimationFrame(loop);
+}
+
+requestAnimationFrame(loop);

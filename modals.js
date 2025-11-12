@@ -36,7 +36,8 @@ Object.assign(modalContainer.style, {
     left: '0',
     width: '100%',
     height: '100%',
-    backgroundColor: 'rgba(33, 23, 89, 0.8)',
+    backgroundColor: 'rgba(33, 23, 89, 0.75)',
+    backdropFilter: 'blur(1px)',
     zIndex: '20001',
     color: 'white',
     fontSize: '24px',
@@ -153,8 +154,9 @@ Object.assign(circle2.style, {
     zIndex: '20001',
     transition: 'transform 0.1s ease',
 });
+
 modalContainer.appendChild(circle2);
-s;
+
 const brightnessCurve = [
     { hour: 0, brightness: 0.5 },
     { hour: 3, brightness: 0.75 },
