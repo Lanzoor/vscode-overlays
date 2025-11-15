@@ -109,7 +109,8 @@ Object.assign(modalInfoText1.style, {
     color: 'rgba(193, 162, 252, 1)',
     textShadow: '0 0 10px rgba(193, 162, 252, 1)',
 });
-modalInfoText1.innerHTML = `VSCode improvements and visuals by Lanzoor.<br>Good luck, and have fun!`;
+
+modalInfoText1.innerHTML = `VSCode improvements and visuals by Lanzoor.<br>You should probably check frequently for new upgrades!<br><b>Do note that VSCode updates disable the overlay, so make sure to follow the README.md file!</b><br>Good luck, and have fun!`;
 modalContainer.appendChild(modalInfoText1);
 
 const modalCloseInfoText = document.createElement('div');
@@ -194,3 +195,44 @@ function updateBrightness() {
 
 setInterval(updateBrightness, 2000);
 updateBrightness();
+
+const blurOverlay = document.createElement('div');
+blurContainer.appendChild(blurOverlay);
+Object.assign(blurOverlay.style, {
+    position: 'absolute',
+    top: '0',
+    left: '0',
+    width: '100%',
+    height: '100%',
+    background: 'rgba(0, 0, 0, 0.15)',
+    backdropFilter: 'blur(3px)',
+    opacity: '0',
+    transition: 'opacity 0.3s ease',
+});
+
+function trackQuickInput() {
+    const widget = document.querySelector('.quick-input-widget');
+    const isVisible = widget && widget.offsetParent !== null;
+    if (isVisible) {
+        blurOverlay.style.opacity = '1';
+        const rect = widget.getBoundingClientRect();
+        const clipPath = `polygon(
+            0 0,
+            0 100%,
+            ${rect.left}px 100%,
+            ${rect.left}px ${rect.top}px,
+            ${rect.right}px ${rect.top}px,
+            ${rect.right}px ${rect.bottom}px,
+            ${rect.left}px ${rect.bottom}px,
+            ${rect.left}px 100%,
+            100% 100%,
+            100% 0
+    )`;
+        blurOverlay.style.clipPath = clipPath;
+    } else {
+        blurOverlay.style.opacity = '0';
+        blurOverlay.style.clipPath = 'none';
+    }
+    requestAnimationFrame(trackQuickInput);
+}
+trackQuickInput();

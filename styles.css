@@ -12,7 +12,7 @@
 }
 
 .monaco-editor {
-    text-shadow: 0 0 3.25px currentColor, 0 0 7.5px currentColor !important;
+    text-shadow: 0 0 7.5px currentColor !important;
 }
 
 .currentFindMatchInline {
@@ -181,6 +181,10 @@
     color: rgba(255, 255, 255, 0.3) !important;
 }
 
+#blurple {
+    animation: blurpleGlow 3s infinite linear;
+}
+
 @keyframes blurpleGlow {
     0% {
         color: rgb(136, 233, 255);
@@ -191,7 +195,7 @@
         text-shadow: 0 0 10px rgb(94, 151, 230);
     }
     50% {
-        color: rgb(135, 97, 217);
+        color: rgb(155, 119, 233);
         text-shadow: 0 0 10px rgb(135, 97, 217);
     }
     75% {

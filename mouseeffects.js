@@ -38,14 +38,14 @@ document.addEventListener('mousemove', (e) => {
         width: '30px',
         height: '30px',
         backgroundColor: '#ff00ff35',
-        boxShadow: '0 0 8px #ff00ff35',
+        boxShadow: '0 0 5px #ff00ff35, inset 0 0 5px #ff00ff35',
     };
 
     const idleTrailStyles = {
         width: '10px',
         height: '10px',
         backgroundColor: '#00ffff35',
-        boxShadow: '0 0 8px #00ffff35',
+        boxShadow: '0 0 5px #00ffff35, inset 0 0 5px #00ffff35',
     };
 
     Object.assign(trail.style, baseTrailStyles, isClicking ? clickTrailStyles : idleTrailStyles);
@@ -69,7 +69,7 @@ Object.assign(cursorRing.style, {
     width: '40px',
     height: '40px',
     border: '2px solid #00ffff',
-    boxShadow: '0 0 8px #00ffff50',
+    boxShadow: '0 0 5px #00ffff50, inset 0 0 5px #00ffff50',
     borderRadius: '50%',
     pointerEvents: 'none',
     zIndex: '30001',
@@ -120,7 +120,8 @@ document.addEventListener('mousedown', (event) => {
         top: `${y}px`,
         width: `${size}px`,
         height: `${size}px`,
-        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        boxShadow: '0 0 7.5px rgba(255, 255, 255, 0.7), inset 0 0 5px rgba(255, 255, 255, 0.8)',
         borderRadius: '50%',
         transition: 'transform 0.5s ease-out, opacity 0.5s ease-out',
         transform: 'scale(1)',
@@ -132,7 +133,7 @@ document.addEventListener('mousedown', (event) => {
 
     requestAnimationFrame(() => {
         Object.assign(ripple.style, {
-            transform: 'scale(7.5)',
+            transform: 'scale(6)',
             opacity: '0',
         });
     });

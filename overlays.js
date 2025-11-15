@@ -9,7 +9,6 @@ const solidYellow = 'rgba(231, 193, 95, 1)';
 const dimGreen = 'rgba(77, 99, 62, 0.8)';
 const dimCyan = 'rgba(62, 99, 97, 0.8)';
 const dimRed = 'rgba(115, 24, 24, 0.8)';
-
 const descStyle = {
     position: 'absolute',
     padding: '10px 15px',
@@ -44,7 +43,7 @@ const overlayStyle = {
     border: `1px solid ${solidCyan}`,
     borderRadius: '8px',
     boxShadow: `0 0 20px ${solidCyan}`,
-    transition: 'background-color 0.5s ease, transform 0.5s ease',
+    transition: 'background-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease',
     pointerEvents: 'auto',
     cursor: 'default',
     zIndex: '20001',
@@ -54,6 +53,7 @@ const overlayStyle = {
 
 const startTime = Date.now();
 const overlayContainer = document.createElement('div');
+
 overlayContainer.id = 'overlay-container';
 document.body.appendChild(overlayContainer);
 
@@ -78,10 +78,8 @@ timeOverlay.appendChild(line);
 overlayContainer.appendChild(timeOverlay);
 
 Object.assign(timeOverlay.style, overlayStyle);
-
 Object.assign(timerText.style, textStyle);
 timerText.style.animation = 'blurpleGlow 5s infinite linear';
-
 Object.assign(line.style, {
     position: 'absolute',
     top: '0',
@@ -93,16 +91,12 @@ Object.assign(line.style, {
 function updateTimer() {
     const now = Date.now();
     const elapsed = now - startTime;
-
     const hours = Math.floor(elapsed / 3600000);
     const mins = Math.floor((elapsed % 3600000) / 60000);
     const secs = Math.floor((elapsed % 60000) / 1000);
     const ms = elapsed % 1000;
-
     const msPadded = ms.toString().padStart(3, '0');
-
     timerText.textContent = `${hours}h ${mins}m ${secs}.${msPadded}s`;
-
     requestAnimationFrame(updateTimer);
 }
 
@@ -115,9 +109,7 @@ const speed = 3;
 function bounceLine() {
     const boxWidth = timeOverlay.clientWidth;
     const lineWidth = line.clientWidth;
-
     position += direction * speed;
-
     if (position + lineWidth >= boxWidth) {
         direction = -1;
         position = boxWidth - lineWidth;
@@ -125,12 +117,35 @@ function bounceLine() {
         direction = 1;
         position = 0;
     }
-
     line.style.left = `${position}px`;
     requestAnimationFrame(bounceLine);
 }
 
 bounceLine();
+
+timeOverlay.addEventListener('mouseenter', () => {
+    timeOverlay.style.transform = 'translateY(-2.5px) scale(1.05)';
+    timeOverlay.style.boxShadow = `0 0 20px ${solidCyan}, inset 0 0 10px ${solidCyan}`;
+});
+
+timeOverlay.addEventListener('mouseleave', () => {
+    timeOverlay.style.transform = 'translateY(0px) scale(1)';
+    timeOverlay.style.boxShadow = `0 0 20px ${solidCyan}`;
+});
+
+timeOverlay.addEventListener('mousedown', () => {
+    timeOverlay.style.transition = 'none';
+    timeOverlay.style.background = lightCyan;
+    timeOverlay.style.transform = 'translateY(-5px) scale(1.1)';
+
+    void timeOverlay.offsetWidth;
+
+    timeOverlay.style.transition = 'background-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease';
+    requestAnimationFrame(() => {
+        timeOverlay.style.transform = 'translateY(-2.5px) scale(1)';
+        timeOverlay.style.background = dimCyan;
+    });
+});
 
 const blurContainer = document.createElement('div');
 document.body.appendChild(blurContainer);
@@ -145,59 +160,12 @@ Object.assign(blurContainer.style, {
     overflow: 'hidden',
 });
 
-const blurOverlay = document.createElement('div');
-blurContainer.appendChild(blurOverlay);
-
-Object.assign(blurOverlay.style, {
-    position: 'absolute',
-    top: '0',
-    left: '0',
-    width: '100%',
-    height: '100%',
-    background: 'rgba(0, 0, 0, 0.15)',
-    backdropFilter: 'blur(3px)',
-    opacity: '0',
-    transition: 'opacity 0.3s ease',
-});
-
-function trackQuickInput() {
-    const widget = document.querySelector('.quick-input-widget');
-    const isVisible = widget && widget.offsetParent !== null;
-
-    if (isVisible) {
-        blurOverlay.style.opacity = '1';
-        const rect = widget.getBoundingClientRect();
-        const clipPath = `polygon(
-            0 0,
-            0 100%,
-            ${rect.left}px 100%,
-            ${rect.left}px ${rect.top}px,
-            ${rect.right}px ${rect.top}px,
-            ${rect.right}px ${rect.bottom}px,
-            ${rect.left}px ${rect.bottom}px,
-            ${rect.left}px 100%,
-            100% 100%,
-            100% 0
-        )`;
-        blurOverlay.style.clipPath = clipPath;
-    } else {
-        blurOverlay.style.opacity = '0';
-        blurOverlay.style.clipPath = 'none';
-    }
-
-    requestAnimationFrame(trackQuickInput);
-}
-
-trackQuickInput();
-
 const keyOverlay = document.createElement('div');
 const keyText = document.createElement('div');
-
 keyOverlay.appendChild(keyText);
 overlayContainer.appendChild(keyOverlay);
 
 Object.assign(keyOverlay.style, overlayStyle);
-
 Object.assign(keyText.style, textStyle);
 
 let keyCount = localStorage.getItem('keyCount');
@@ -241,7 +209,7 @@ document.addEventListener('keyup', () => {
 });
 
 setInterval(() => {
-    text_hue += 1;
+    text_hue = (text_hue + 1) % 360;
     keyOverlay.style.backgroundColor = `hsla(${text_hue}, 100%, 60%, 0.5)`;
     keyOverlay.style.boxShadow = `0 0 20px hsl(${text_hue}, 100%, 60%)`;
     keyOverlay.style.border = `1px solid hsl(${text_hue}, 100%, 75%)`;
@@ -269,7 +237,10 @@ function updateLocation() {
         });
 }
 
-updateLocation();
+setTimeout(() => {
+    updateLocation();
+    setInterval(updateLocation, 50000);
+}, 1000);
 
 const weatherDescriptions = {
     0: 'Clear sky',
@@ -324,11 +295,8 @@ weatherDesc.appendChild(weatherDescText);
 overlayContainer.appendChild(weatherOverlay);
 
 Object.assign(weatherOverlay.style, overlayStyle);
-
 Object.assign(weatherText.style, textStyle);
-
 Object.assign(weatherDesc.style, descStyle);
-
 Object.assign(weatherDescText.style, textStyle);
 
 const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -339,9 +307,7 @@ function degreesToCardinal(degrees) {
         return 'Unavailable';
     }
     degrees = ((degrees % 360) + 360) % 360;
-
     const directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-
     const index = Math.round(degrees / 22.5) % 16;
     return directions[index];
 }
@@ -356,7 +322,6 @@ function updateWeather() {
 
     const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${latitude}&longitude=${longitude}&current=temperature_2m,weathercode,wind_speed_10m,wind_direction_10m,relative_humidity_2m&timezone=auto`;
     const airUrl = `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${latitude}&longitude=${longitude}&current=pm10,pm2_5&timezone=auto`;
-
     Promise.all([
         fetch(weatherUrl).then((res) => {
             if (!res.ok) {
@@ -384,7 +349,6 @@ function updateWeather() {
             humidity = weatherData.current?.relative_humidity_2m ?? 'N/A';
             pm10 = airData?.current?.pm10 ?? 'N/A';
             pm2_5 = airData?.current?.pm2_5 ?? 'N/A';
-
             availableWeather = true;
             updateWeatherContent();
         })
@@ -396,31 +360,26 @@ function updateWeather() {
 }
 
 setTimeout(() => {
-    updateLocation();
-    setInterval(updateLocation, 50000);
-}, 1000);
-
-setTimeout(() => {
     updateWeather();
     setInterval(updateWeather, 10000);
 }, 1500);
 
+let weatherOverlayHover = false;
+
 function updateWeatherStatus() {
-    if (availableWeather && availableLocation) {
-        weatherOverlay.style.background = dimCyan;
-        weatherOverlay.style.boxShadow = `0 0 20px ${solidCyan}`;
-        weatherOverlay.style.border = `1px solid ${solidCyan}`;
-        weatherOverlay.style.color = `${solidCyan}`;
-    } else {
-        weatherOverlay.style.background = dimRed;
-        weatherOverlay.style.boxShadow = `0 0 20px ${solidRed}`;
-        weatherOverlay.style.border = `1px solid ${solidRed}`;
-        weatherOverlay.style.color = `${solidRed}`;
+    const isSuccess = availableWeather && availableLocation;
+    const color = isSuccess ? solidCyan : solidRed;
+    const dimColor = isSuccess ? dimCyan : dimRed;
+    weatherOverlay.style.background = dimColor;
+    weatherOverlay.style.border = `1px solid ${color}`;
+    weatherOverlay.style.color = color;
+    if (!weatherOverlayHover) {
+        weatherOverlay.style.boxShadow = `0 0 20px ${color}`;
     }
 }
 
-updateWeatherStatus();
 setInterval(updateWeatherStatus, 500);
+updateWeatherStatus();
 
 function updateWeatherContent() {
     if (availableWeather && availableLocation) {
@@ -435,22 +394,25 @@ function updateWeatherContent() {
 }
 
 weatherOverlay.addEventListener('mouseenter', () => {
+    weatherOverlayHover = true;
     weatherText.textContent = `▼ ${timezone}`;
     const rect = weatherOverlay.getBoundingClientRect();
-
     updateWeatherContent();
     weatherDesc.style.left = `${rect.left + rect.width / 2}px`;
     weatherDesc.style.top = `${rect.top - weatherDesc.offsetHeight - 10}px`;
     weatherDesc.style.transform = 'translateX(-50%) translateY(0)';
     weatherDesc.style.opacity = '1';
     weatherOverlay.style.transform = 'translateY(-2.5px) scale(1.05)';
+    weatherOverlay.style.boxShadow = `0 0 20px ${availableLocation && availableWeather ? solidCyan : solidRed}, inset 0 0 10px ${availableLocation && availableWeather ? solidCyan : solidRed}`;
 });
 
 weatherOverlay.addEventListener('mouseleave', () => {
+    weatherOverlayHover = false;
     weatherText.textContent = `▲ ${timezone}`;
     weatherDesc.style.opacity = '0';
     weatherDesc.style.transform = 'translateX(-50%) translateY(5px)';
     weatherOverlay.style.transform = 'translateY(0px) scale(1)';
+    weatherOverlay.style.boxShadow = `0 0 20px ${availableLocation && availableWeather ? solidCyan : solidRed}`;
 });
 
 weatherOverlay.addEventListener('mousedown', () => {
@@ -468,8 +430,7 @@ weatherOverlay.addEventListener('mousedown', () => {
 
     void weatherOverlay.offsetWidth;
 
-    weatherOverlay.style.transition = 'background-color 0.5s ease, transform 0.5s ease';
-
+    weatherOverlay.style.transition = 'background-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease';
     requestAnimationFrame(() => {
         weatherOverlay.style.background = availableWeather ? dimCyan : dimRed;
         weatherOverlay.style.transform = 'translateY(-2.5px) scale(1)';
@@ -495,14 +456,13 @@ Object.assign(levelOverlay.style, {
     left: '50%',
     top: '10px',
     transform: 'translateX(-50%)',
-    fontFamily: "'FiraCode Nerd Font', monospace",
+    fontFamily: 'Consolas, monospace',
     transition: 'opacity 1s ease',
     border: '2px solid hsla(0, 100%, 90%, 1)',
     width: '30%',
+    pointerEvents: 'auto',
 });
-
 Object.assign(levelText.style, textStyle);
-
 Object.assign(levelProgress.style, {
     position: 'absolute',
     top: '0',
@@ -512,8 +472,8 @@ Object.assign(levelProgress.style, {
     borderRadius: '5px',
     transition: 'width 0.2s ease',
     zIndex: '20001',
+    pointerEvents: 'none',
 });
-
 Object.assign(levelProgressLine.style, {
     position: 'absolute',
     top: '0',
@@ -523,13 +483,13 @@ Object.assign(levelProgressLine.style, {
     borderRadius: '5px',
     transition: 'left 0.2s ease',
     zIndex: '20003',
+    pointerEvents: 'none',
 });
 
 function getCurrentLevelStatus() {
     let baseLevel = 500;
     let copyKeyCount = keyCount;
     let level = 0;
-
     while (true) {
         if (copyKeyCount >= baseLevel) {
             copyKeyCount -= baseLevel;
@@ -541,18 +501,30 @@ function getCurrentLevelStatus() {
     }
 }
 
+let hoveringLevel = false;
+
 function updateLevelContent() {
     const [level, keys, nextLevelReq] = getCurrentLevelStatus();
-    levelText.textContent = `Lv. ${level} | ${keys}/${nextLevelReq} (${nextLevelReq - keys} left)`;
-
-    const progressPercent = (keys / nextLevelReq) * 100;
-    levelProgress.style.width = `${progressPercent}%`;
-    levelProgressLine.style.left = `${progressPercent}%`;
-
+    if (hoveringLevel) {
+        levelText.textContent = `Lv. ${level} -> ${level + 1} | 0/${nextLevelReq + 50}`;
+    } else {
+        levelText.textContent = `Lv. ${level} | ${keys}/${nextLevelReq} (${nextLevelReq - keys} left)`;
+        const progressPercent = (keys / nextLevelReq) * 100;
+        levelProgress.style.width = `${progressPercent}%`;
+        levelProgressLine.style.left = `${progressPercent}%`;
+    }
     requestAnimationFrame(updateLevelContent);
 }
 
 updateLevelContent();
+
+levelOverlay.addEventListener('mouseenter', () => {
+    hoveringLevel = true;
+});
+
+levelOverlay.addEventListener('mouseleave', () => {
+    hoveringLevel = false;
+});
 
 let level_hue = 0;
 
@@ -575,14 +547,14 @@ updateLevelColor();
 let lastFrameTime = performance.now();
 let lastUpdateTime = performance.now();
 let frameCount = 0;
-
 let fpsDisplay = document.createElement('div');
+
 Object.assign(fpsDisplay.style, {
     position: 'fixed',
     bottom: '20px',
     left: '50%',
     transform: 'translateX(-50%)',
-    zIndex: '30001',
+    zIndex: '20001',
     fontFamily: "'FiraCode Nerd Font', monospace",
     fontSize: '20px',
 });
@@ -592,11 +564,9 @@ document.body.appendChild(fpsDisplay);
 function loop() {
     const now = performance.now();
     frameCount++;
-
     if (now - lastUpdateTime >= 250) {
         const fps = ((frameCount * 1000) / (now - lastUpdateTime)).toFixed(2);
         fpsDisplay.textContent = `${fps} FPS`;
-
         if (fps <= 30) {
             fpsDisplay.style.color = solidRed;
             fpsDisplay.style.textShadow = `0 0 10px ${lightRed}`;
@@ -607,11 +577,9 @@ function loop() {
             fpsDisplay.style.color = solidGreen;
             fpsDisplay.style.textShadow = `0 0 10px ${lightGreen}`;
         }
-
         frameCount = 0;
         lastUpdateTime = now;
     }
-
     lastFrameTime = now;
     requestAnimationFrame(loop);
 }
